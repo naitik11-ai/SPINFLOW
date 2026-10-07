@@ -57,9 +57,6 @@ export default function GuidelinesModal({
                   Required Reading
                 </span>
               </div>
-              <p className="text-[11px] text-slate-300">
-                Please follow these rules to ensure machine longevity and fair usage for all 105 students
-              </p>
             </div>
           </div>
 

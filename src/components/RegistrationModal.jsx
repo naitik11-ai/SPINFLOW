@@ -588,10 +588,6 @@ export default function RegistrationModal({
                       </button>
                     ))}
                   </div>
-
-                  <p className="text-[10px] text-slate-500 pt-0.5">
-                    Rule: Max 5 pairs (10 dry clothes). Shirts, pants & track pants only. Liquid detergent only (no socks/handkerchiefs).
-                  </p>
                 </div>
               ) : (
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-2">
