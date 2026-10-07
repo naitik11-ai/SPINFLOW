@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { 
   Volume2, 
   VolumeX, 

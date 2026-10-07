@@ -4,11 +4,12 @@ import {
   Clock, 
   ShieldCheck, 
   History, 
-  CheckCircle2
+  CheckCircle2,
+  Check, 
+  Ban 
 } from 'lucide-react';
 import { HOURLY_BUSYNESS, LAUNDRY_GUIDELINES } from '../utils/constants';
 import { formatRelativeTime } from '../utils/helpers';
-import { Check, Ban } from 'lucide-react';
 
 export default function InsightsAndStats({ history = [] }) {
   const [activeTab, setActiveTab] = useState('busyness');
