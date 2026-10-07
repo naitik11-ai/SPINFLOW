@@ -409,7 +409,7 @@ export default function RegistrationModal({
                 </span>
               </label>
 
-              <div className="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
+              <div className="flex sm:grid sm:grid-cols-7 gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
                 {upcomingDays.map((day) => {
                   const isSelected = selectedDate === day.dateStr;
                   return (
@@ -420,16 +420,16 @@ export default function RegistrationModal({
                         sound.playClick();
                         setSelectedDate(day.dateStr);
                       }}
-                      className={`p-2 rounded-xl border text-center transition-all ${
+                      className={`min-w-[70px] sm:min-w-0 flex-1 sm:flex-initial p-2 rounded-xl border text-center transition-all shrink-0 ${
                         isSelected
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-sm ring-2 ring-blue-200'
                           : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
                       }`}
                     >
                       <span className="text-[10px] font-medium block uppercase tracking-wider opacity-80">
                         {day.weekday}
                       </span>
-                      <span className="text-sm sm:text-base font-bold block mt-0.5">
+                      <span className="text-sm sm:text-base font-bold block mt-0.5 font-mono">
                         {day.dayNumber}
                       </span>
                       <span className="text-[9px] block opacity-75 truncate">
@@ -446,15 +446,15 @@ export default function RegistrationModal({
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-blue-600" />
-                  <span>3. Select Fixed 1h 30m Time Slot ({formatSlotDateDisplay(selectedDate)})</span>
+                  <span>3. Select Fixed 1h 30m Slot</span>
                 </label>
                 <span className="text-[10px] font-mono font-medium text-slate-500">
-                  12 Slots Daily
+                  {formatSlotDateDisplay(selectedDate)}
                 </span>
               </div>
 
               {/* 12 Slots Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2">
                 {FIXED_SLOTS.map((slot) => {
                   const availability = getSlotAvailability(slot);
                   const isSelected = selectedSlotId === slot.id;
@@ -469,40 +469,40 @@ export default function RegistrationModal({
                         sound.playClick();
                         setSelectedSlotId(slot.id);
                       }}
-                      className={`p-2.5 rounded-xl border text-left transition-all relative ${
+                      className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all relative ${
                         isSelected && isAvailable
-                          ? 'bg-blue-50/80 border-blue-600 ring-2 ring-blue-600/30 shadow-xs'
+                          ? 'bg-blue-50/90 border-blue-600 ring-2 ring-blue-600/30 shadow-xs'
                           : isAvailable
                           ? 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'
                           : 'bg-slate-50 border-slate-100 opacity-60 cursor-not-allowed'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-1">
                         <span className="text-[10px] font-bold text-slate-500 font-mono">
                           Slot {slot.index}
                         </span>
                         {isAvailable ? (
-                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 shrink-0">
                             Free
                           </span>
                         ) : availability.status === 'PASSED' ? (
-                          <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-200 text-slate-600">
+                          <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-200 text-slate-600 shrink-0">
                             Passed
                           </span>
                         ) : (
-                          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 truncate max-w-[70px]">
+                          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 truncate max-w-[65px] shrink-0">
                             {availability.bookedBy || 'Booked'}
                           </span>
                         )}
                       </div>
 
-                      <div className="mt-1 font-mono font-bold text-xs text-slate-900">
+                      <div className="mt-1 font-mono font-bold text-[11px] sm:text-xs text-slate-900 truncate">
                         {slot.label}
                       </div>
 
-                      <div className="text-[10px] text-slate-500 mt-0.5 flex items-center justify-between">
+                      <div className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 flex items-center justify-between">
                         <span>{slot.period}</span>
-                        <span className="font-mono">90 mins</span>
+                        <span className="font-mono">90m</span>
                       </div>
                     </button>
                   );

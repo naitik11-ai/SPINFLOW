@@ -67,26 +67,26 @@ export default function Header({
           </div>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Admin Portal Button */}
             {adminUser ? (
-              <div className="flex items-center bg-slate-900 text-white rounded-lg p-1 text-xs">
+              <div className="flex items-center bg-slate-900 text-white rounded-lg p-0.5 sm:p-1 text-xs">
                 <button
                   onClick={() => {
                     sound.playClick();
                     onOpenAdmin();
                   }}
-                  className="flex items-center gap-1.5 px-2 py-0.5 text-white font-bold hover:text-blue-300 transition-colors"
+                  className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1 text-white font-bold hover:text-blue-300 transition-colors"
                 >
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Admin Dashboard</span>
+                  <span className="text-[11px] sm:text-xs">Admin</span>
                 </button>
                 <button
                   onClick={onLogoutAdmin}
                   title="Logout Admin"
-                  className="p-1 rounded-md hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors ml-1"
+                  className="p-1 rounded-md hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <LogOut className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
               </div>
             ) : (
@@ -96,10 +96,11 @@ export default function Header({
                   onOpenAdmin();
                 }}
                 title="Admin Dashboard (Requires Admin Phone + OTP)"
-                className="py-1.5 px-2.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-colors flex items-center gap-1.5"
+                className="py-1.5 px-2 sm:px-2.5 rounded-lg text-[11px] sm:text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-colors flex items-center gap-1 sm:gap-1.5 shrink-0"
               >
                 <Lock className="w-3.5 h-3.5 text-slate-600" />
-                <span>Admin Login</span>
+                <span className="hidden xs:inline">Admin</span>
+                <span className="hidden sm:inline">Login</span>
               </button>
             )}
 
@@ -110,19 +111,19 @@ export default function Header({
                 onOpenQRSticker();
               }}
               title="View Machine 1 QR Sticker (Printable)"
-              className="py-1.5 px-2 sm:px-2.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors flex items-center gap-1.5"
+              className="py-1.5 px-2 sm:px-2.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors flex items-center gap-1 sm:gap-1.5 shrink-0"
             >
               <QrCode className="w-3.5 h-3.5 text-blue-600" />
-              <span className="hidden sm:inline">Machine QR</span>
+              <span className="hidden sm:inline">QR Sticker</span>
             </button>
 
             {/* Sound Toggle */}
             <button
               onClick={handleToggleMute}
               title={isMuted ? 'Unmute' : 'Mute'}
-              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+              className="p-1.5 sm:p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors shrink-0"
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-rose-500" /> : <Volume2 className="w-4 h-4" />}
+              {isMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-500" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
             </button>
 
             {/* Book Slot CTA */}
@@ -131,10 +132,10 @@ export default function Header({
                 sound.playClick();
                 onOpenBooking();
               }}
-              className="py-1.5 sm:py-2 px-2.5 sm:px-3.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center gap-1 shadow-sm shrink-0"
+              className="py-1.5 sm:py-2 px-2.5 sm:px-3.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center gap-1 shadow-sm shrink-0"
             >
-              <Plus className="w-4 h-4" />
-              <span>Book Slot</span>
+              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>Book<span className="hidden sm:inline"> Slot</span></span>
             </button>
           </div>
         </div>

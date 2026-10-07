@@ -216,55 +216,55 @@ export default function AdminDashboardModal({
         </div>
 
         {/* Quick KPI Overview Cards */}
-        <div className="p-4 sm:px-6 bg-white border-b border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0">
-          <div className="p-3 bg-blue-50/60 border border-blue-200/80 rounded-xl">
-            <span className="text-[10px] font-bold text-blue-800 uppercase tracking-wider block">
+        <div className="p-3 sm:px-6 bg-white border-b border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 shrink-0">
+          <div className="p-2.5 sm:p-3 bg-blue-50/60 border border-blue-200/80 rounded-xl">
+            <span className="text-[9px] sm:text-[10px] font-bold text-blue-800 uppercase tracking-wider block truncate">
               Total Machine Runtime
             </span>
-            <span className="font-mono text-xl sm:text-2xl font-bold text-blue-950 block mt-0.5">
+            <span className="font-mono text-lg sm:text-2xl font-bold text-blue-950 block mt-0.5">
               {totalRuntimeHours} hrs
             </span>
-            <span className="text-[10px] text-blue-700">
+            <span className="text-[9px] sm:text-[10px] text-blue-700 truncate block">
               {totalWashesCompleted} wash sessions
             </span>
           </div>
 
-          <div className="p-3 bg-emerald-50/60 border border-emerald-200/80 rounded-xl">
-            <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">
+          <div className="p-2.5 sm:p-3 bg-emerald-50/60 border border-emerald-200/80 rounded-xl">
+            <span className="text-[9px] sm:text-[10px] font-bold text-emerald-800 uppercase tracking-wider block truncate">
               Eligible for Booking
             </span>
-            <span className="font-mono text-xl sm:text-2xl font-bold text-emerald-950 block mt-0.5">
+            <span className="font-mono text-lg sm:text-2xl font-bold text-emerald-950 block mt-0.5">
               {totalEligibleQuotas} Students
             </span>
-            <span className="text-[10px] text-emerald-700">
-              Quota available this week
+            <span className="text-[9px] sm:text-[10px] text-emerald-700 truncate block">
+              Quota available
             </span>
           </div>
 
-          <div className="p-3 bg-amber-50/60 border border-amber-200/80 rounded-xl">
-            <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">
+          <div className="p-2.5 sm:p-3 bg-amber-50/60 border border-amber-200/80 rounded-xl">
+            <span className="text-[9px] sm:text-[10px] font-bold text-amber-800 uppercase tracking-wider block truncate">
               Quota Locked
             </span>
-            <span className="font-mono text-xl sm:text-2xl font-bold text-amber-950 block mt-0.5">
+            <span className="font-mono text-lg sm:text-2xl font-bold text-amber-950 block mt-0.5">
               {totalLockedQuotas} Students
             </span>
-            <span className="text-[10px] text-amber-700">
-              Used 1-slot weekly limit
+            <span className="text-[9px] sm:text-[10px] text-amber-700 truncate block">
+              1-slot weekly limit
             </span>
           </div>
 
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col justify-between">
+          <div className="p-2.5 sm:p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col justify-between">
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+              <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider block truncate">
                 Machine Status
               </span>
-              <span className="text-xs font-bold text-slate-900 block mt-0.5">
+              <span className="text-[11px] sm:text-xs font-bold text-slate-900 block mt-0.5 truncate">
                 {machines[0]?.status === 'RUNNING' ? 'In Use (Washing)' : 'Available / Idle'}
               </span>
             </div>
             <button
               onClick={handleExportCSV}
-              className="mt-1 py-1 px-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold flex items-center justify-center gap-1 shadow-2xs transition-colors"
+              className="mt-1 py-1 px-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[10px] sm:text-[11px] font-bold flex items-center justify-center gap-1 shadow-2xs transition-colors"
             >
               <Download className="w-3 h-3" />
               <span>Export CSV</span>
@@ -273,30 +273,32 @@ export default function AdminDashboardModal({
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-4 sm:px-6 pt-3 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between shrink-0">
-          <div className="flex gap-2">
+        <div className="px-3 sm:px-6 pt-2.5 sm:pt-3 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between shrink-0 overflow-x-auto no-scrollbar">
+          <div className="flex gap-1.5 sm:gap-2">
             <button
               onClick={() => setActiveTab('students')}
-              className={`pb-2.5 px-3 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 ${
+              className={`pb-2 px-2.5 sm:px-3 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === 'students'
                   ? 'border-blue-600 text-blue-700'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
               <Users className="w-3.5 h-3.5" />
-              <span>Student Usage & Time Spent ({directory.length})</span>
+              <span className="hidden sm:inline">Student Usage & Time Spent ({directory.length})</span>
+              <span className="sm:hidden">Students ({directory.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('roster')}
-              className={`pb-2.5 px-3 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 ${
+              className={`pb-2 px-2.5 sm:px-3 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === 'roster'
                   ? 'border-blue-600 text-blue-700'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
               <Clock className="w-3.5 h-3.5" />
-              <span>Active Machine & Scheduled Slots ({queue.length})</span>
+              <span className="hidden sm:inline">Active Machine & Scheduled Slots ({queue.length})</span>
+              <span className="sm:hidden">Slots ({queue.length})</span>
             </button>
           </div>
         </div>
@@ -305,49 +307,49 @@ export default function AdminDashboardModal({
         {activeTab === 'students' && (
           <div className="flex flex-col flex-1 overflow-hidden">
             {/* Filter Bar */}
-            <div className="p-3 sm:px-6 bg-white border-b border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0">
+            <div className="p-3 sm:px-6 bg-white border-b border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 shrink-0">
               <div className="relative flex-1">
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder="Search resident, room (e.g. 101), or phone..."
+                  placeholder="Search student, room (e.g. 101), phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
-              <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+              <div className="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2">
                 <select
                   value={selectedFloor}
                   onChange={(e) => setSelectedFloor(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500"
+                  className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-[11px] sm:text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500 truncate"
                 >
                   <option value="all">All Floors</option>
-                  <option value="1st Floor">1st Floor (101-135)</option>
-                  <option value="2nd Floor">2nd Floor (201-235)</option>
-                  <option value="3rd Floor">3rd Floor (301-335)</option>
+                  <option value="1st Floor">1st Floor</option>
+                  <option value="2nd Floor">2nd Floor</option>
+                  <option value="3rd Floor">3rd Floor</option>
                 </select>
 
                 <select
                   value={filterQuota}
                   onChange={(e) => setFilterQuota(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500"
+                  className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-[11px] sm:text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500 truncate"
                 >
                   <option value="all">All Quotas</option>
-                  <option value="locked">Quota Locked (Used)</option>
-                  <option value="eligible">Eligible (Ready)</option>
-                  <option value="active">Currently Washing</option>
+                  <option value="locked">Locked</option>
+                  <option value="eligible">Eligible</option>
+                  <option value="active">Washing</option>
                 </select>
 
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500"
+                  className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-[11px] sm:text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500 truncate"
                 >
-                  <option value="usage_desc">Highest Usage Time</option>
-                  <option value="room_asc">Room Number (Asc)</option>
-                  <option value="recent">Most Recent Wash</option>
+                  <option value="usage_desc">Most Usage</option>
+                  <option value="room_asc">Room No</option>
+                  <option value="recent">Recent</option>
                 </select>
               </div>
             </div>

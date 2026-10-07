@@ -183,12 +183,12 @@ export default function QueueBoard({
           </div>
 
           {/* Search & Date Filter */}
-          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
             <div className="relative flex-1 sm:w-48 min-w-[140px]">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search resident or room..."
+                placeholder="Search student or room..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
@@ -215,7 +215,7 @@ export default function QueueBoard({
               className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center gap-1 shadow-xs shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Book Slot</span>
+              <span>Book<span className="hidden sm:inline"> Slot</span></span>
             </button>
           </div>
         </div>
