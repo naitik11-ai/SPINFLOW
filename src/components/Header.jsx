@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { 
   Volume2, 
   VolumeX, 
@@ -9,7 +8,8 @@ import {
   Clock, 
   BarChart3,
   Lock,
-  ShieldCheck
+  ShieldCheck,
+  BookOpen
 } from 'lucide-react';
 import { sound } from '../utils/audio';
 
@@ -17,6 +17,7 @@ export default function Header({
   machines = [],
   onOpenBooking,
   onOpenQRSticker,
+  onOpenGuidelines,
   adminUser = null,
   onOpenAdmin,
   onLogoutAdmin
@@ -115,6 +116,19 @@ export default function Header({
             >
               <QrCode className="w-3.5 h-3.5 text-blue-600" />
               <span className="hidden sm:inline">QR Sticker</span>
+            </button>
+
+            {/* View Laundry Guidelines / Rules */}
+            <button
+              onClick={() => {
+                sound.playClick();
+                onOpenGuidelines();
+              }}
+              title="Hostel Laundry Guidelines & Rules (Do's and Don'ts)"
+              className="py-1.5 px-2 sm:px-2.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 transition-colors flex items-center gap-1 sm:gap-1.5 shrink-0"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+              <span className="hidden sm:inline">Rules</span>
             </button>
 
             {/* Sound Toggle */}

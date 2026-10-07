@@ -26,12 +26,8 @@ import {
 import { sound } from '../utils/audio';
 
 const BEDSHEET_PRESETS = [
-  { id: '1-single', label: '1 Single Bedsheet', items: 1 },
-  { id: '1-double', label: '1 Double Bedsheet', items: 1 },
-  { id: '2-bedsheets', label: '2 Bedsheets', items: 2 },
-  { id: 'bedsheet-blanket', label: 'Bedsheet + Blanket', items: 2 },
-  { id: 'thick-blanket', label: 'Heavy Blanket / Quilt', items: 1 },
-  { id: 'towels-linens', label: 'Towels & Linens', items: 6 },
+  { id: '1-single', label: '1 Single Bedsheet (Max 1)', items: 1 },
+  { id: '1-double', label: '1 Double Bedsheet (Max 1)', items: 1 },
 ];
 
 export default function RegistrationModal({
@@ -113,7 +109,7 @@ export default function RegistrationModal({
   if (!isOpen) return null;
 
   const handleClothesChange = (count) => {
-    const num = Math.max(1, Math.min(50, Number(count) || 1));
+    const num = Math.max(1, Math.min(10, Number(count) || 1));
     setFormData((prev) => ({ ...prev, clothesCount: num }));
   };
 
@@ -563,42 +559,58 @@ export default function RegistrationModal({
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-800">
-                      Number of Clothes ({formData.clothesCount} items)
+                      Number of Clothes ({formData.clothesCount} items / {Math.ceil(formData.clothesCount / 2)} pairs)
                     </span>
-                    <span className="text-[11px] text-slate-500 font-medium">
-                      Est. {(formData.clothesCount * 0.35).toFixed(1)} kg
+                    <span className="text-[11px] font-bold text-blue-700 font-mono">
+                      Max 10 clothes (5 pairs)
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 sm:gap-2">
-                    {[5, 10, 15, 20, 25, 30].map((count) => (
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 sm:gap-2">
+                    {[
+                      { count: 2, label: '2 pcs (1 pr)' },
+                      { count: 4, label: '4 pcs (2 prs)' },
+                      { count: 6, label: '6 pcs (3 prs)' },
+                      { count: 8, label: '8 pcs (4 prs)' },
+                      { count: 10, label: '10 pcs (5 prs max)' },
+                    ].map((item) => (
                       <button
-                        key={count}
+                        key={item.count}
                         type="button"
-                        onClick={() => handleClothesChange(count)}
-                        className={`py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                          formData.clothesCount === count
-                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                        onClick={() => handleClothesChange(item.count)}
+                        className={`py-2 px-1 rounded-lg text-xs font-medium border text-center transition-colors ${
+                          formData.clothesCount === item.count
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs font-bold'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
                         }`}
                       >
-                        {count} pcs
+                        {item.label}
                       </button>
                     ))}
                   </div>
+
+                  <p className="text-[10px] text-slate-500 pt-0.5">
+                    Rule: Max 5 pairs (10 dry clothes). Shirts, pants & track pants only. Liquid detergent only (no socks/handkerchiefs).
+                  </p>
                 </div>
               ) : (
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-xs font-bold text-slate-800 block">
-                    Select Bedsheet / Linens Type:
-                  </span>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2">
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-800 block">
+                      Select Bedsheet (1 Bedsheet Limit):
+                    </span>
+                    <span className="text-[11px] font-bold text-indigo-700 font-mono">
+                      1 item only
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
                     {BEDSHEET_PRESETS.map((preset) => (
                       <button
                         key={preset.id}
                         type="button"
                         onClick={() => setFormData({ ...formData, bedsheetPreset: preset.id })}
-                        className={`py-2 px-2.5 rounded-lg text-xs font-medium border text-left transition-colors ${
+                        className={`py-2 px-3 rounded-lg text-xs font-medium border text-left transition-colors ${
                           formData.bedsheetPreset === preset.id
                             ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
@@ -608,6 +620,10 @@ export default function RegistrationModal({
                       </button>
                     ))}
                   </div>
+
+                  <p className="text-[10px] text-slate-500 pt-0.5">
+                    Rule: 1 single/double bedsheet only. Liquid detergent only. Never wash clothes with bedsheets.
+                  </p>
                 </div>
               )}
             </div>

@@ -78,6 +78,85 @@ export const HOURLY_BUSYNESS = [
   { hour: '22:30', level: 40, label: 'Low' },
 ];
 
+export const LAUNDRY_GUIDELINES = {
+  dos: [
+    {
+      title: 'Only Dry Clothes Allowed',
+      desc: 'Load only completely dry clothes into the machine. Never put pre-soaked or dripping wet clothes.'
+    },
+    {
+      title: 'Only Standard Apparel Allowed (Shirts, Pants, Track Pants)',
+      desc: 'Only wash regular apparel such as shirts, t-shirts, pants, jeans, track pants, and shorts. No small items allowed.'
+    },
+    {
+      title: 'Use Liquid Detergent Only',
+      desc: 'Always use liquid detergent in the dispenser drawer. Powder detergents and soap cakes are strictly prohibited.'
+    },
+    {
+      title: 'Maximum 5 Pairs of Clothes (10 Clothes Limit)',
+      desc: 'Limit your wash load to a maximum of 5 pairs of clothes (total 10 clothes maximum) per wash cycle.'
+    },
+    {
+      title: 'Only 1 Bedsheet at a Time',
+      desc: 'Wash only 1 single or double bedsheet per slot. Never mix bedsheets with regular clothes or wash multiple bedsheets together.'
+    },
+    {
+      title: 'Empty All Pockets Completely',
+      desc: 'Check all pockets for coins, keys, safety pins, ID cards, earphones, clips, pens, and paper/tissues before loading.'
+    },
+    {
+      title: 'Come Strictly According to Your Allocated Slot',
+      desc: 'Arrive strictly on time at the start of your reserved 1h 30m slot and scan the machine QR sticker to start your cycle.'
+    },
+    {
+      title: 'Collect Clothes Promptly & Leave Door Ajar',
+      desc: 'Remove washed laundry promptly during the 25-minute rest/pickup window and leave the front door slightly cracked open to air out the drum.'
+    }
+  ],
+  donts: [
+    {
+      title: 'Do NOT Wash Small Items (Socks, Handkerchiefs, Napkins)',
+      desc: 'Small items like socks, handkerchiefs, napkins, or small cloths get sucked past the gasket into the drain pump filter and choke the machine.'
+    },
+    {
+      title: 'Do NOT Use Powder Detergent or Soap Bars',
+      desc: 'Strictly use liquid detergent only. Powder detergents leave chemical residue, generate excessive suds, and clog internal pipes.'
+    },
+    {
+      title: 'Do NOT Put Dripping Wet / Pre-Soaked Clothes',
+      desc: 'Never put bucket-soaked or waterlogged clothes; the unbalanced heavy water weight trips and damages the spin motor.'
+    },
+    {
+      title: 'Do NOT Arrive Outside Your Reserved Slot',
+      desc: 'Never attempt to use the machine before/after your scheduled slot or interfere with another resident\'s booked window.'
+    },
+    {
+      title: 'Do NOT Exceed 10 Clothes / 5 Pairs Limit',
+      desc: 'Never overload the machine beyond 10 clothes (5 pairs). Overloading burns the motor and leaves clothes uncleaned.'
+    },
+    {
+      title: 'Do NOT Wash Multiple Bedsheets or Heavy Blankets',
+      desc: 'Only 1 bedsheet is allowed per wash. Heavy bulky blankets or multiple bedsheets cause severe drum imbalance and vibration faults.'
+    },
+    {
+      title: 'Do NOT Wash Shoes, Footwear, or Heavy Doormats',
+      desc: 'Hard soles and heavy rugs crack the glass door, damage drum paddles, and break internal suspension springs.'
+    },
+    {
+      title: 'Do NOT Put Hard/Sharp Objects (Coins, Belts, Open Zippers)',
+      desc: 'Unzipped metal zippers, open safety pins, and heavy metal belt buckles scratch the drum and damage internal sensors.'
+    },
+    {
+      title: 'Do NOT Force Open the Door While Running',
+      desc: 'The door remains electronically locked during the cycle. Forcing it open will break the safety latch.'
+    },
+    {
+      title: 'Do NOT Exceed Weekly 1-Slot Quota',
+      desc: 'Each resident is strictly allowed 1 slot per 7 days. Do not attempt multiple bookings in the same week.'
+    }
+  ]
+};
+
 export const DORM_RULES = [
   {
     title: 'Operating Hours: 6:00 AM - 12:00 AM Midnight',
@@ -86,6 +165,14 @@ export const DORM_RULES = [
   {
     title: 'Weekly 1-Slot Quota per Resident',
     desc: 'With 105 students sharing 1 machine, each resident is allocated 1 slot every 7 days to ensure fair and equal access.',
+  },
+  {
+    title: 'Load Limit: Max 10 Clothes (5 Pairs) or 1 Bedsheet',
+    desc: 'Strictly dry clothes only. Max 5 pairs of clothes (10 clothes) or 1 bedsheet per cycle. No loose socks or wet clothes.',
+  },
+  {
+    title: 'Liquid Detergent Only · No Small Items',
+    desc: 'Use liquid detergent only (no powder). Only shirts, pants, track pants allowed (no socks or handkerchiefs).',
   },
   {
     title: 'Strict 3-Way Identity Verification',

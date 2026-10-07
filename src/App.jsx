@@ -9,6 +9,7 @@ import QRScannerModal from './components/QRScannerModal';
 import StudentDirectoryModal from './components/StudentDirectoryModal';
 import AdminDashboardModal from './components/AdminDashboardModal';
 import InsightsAndStats from './components/InsightsAndStats';
+import GuidelinesModal from './components/GuidelinesModal';
 import Toast from './components/Toast';
 
 import { Plus, Camera, QrCode } from 'lucide-react';
@@ -86,6 +87,7 @@ export default function App() {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [isAdminAuthOpen, setIsAdminAuthOpen] = useState(false);
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
   const [isQRScannerOpen, setIsQRScannerOpen] = useState(false);
@@ -94,6 +96,31 @@ export default function App() {
   const [selectedMachineForQR, setSelectedMachineForQR] = useState(machines[0] || INITIAL_MACHINES[0]);
   const [preselectedMachineId, setPreselectedMachineId] = useState('machine-1');
   const [toast, setToast] = useState(null);
+
+  // Auto-display Guidelines on initial visit
+  useEffect(() => {
+    try {
+      const hasAcknowledged = localStorage.getItem('spinflow_guidelines_acknowledged_v1');
+      if (!hasAcknowledged) {
+        const timer = setTimeout(() => {
+          setIsGuidelinesOpen(true);
+        }, 600);
+        return () => clearTimeout(timer);
+      }
+    } catch {
+      // Fallback
+    }
+  }, []);
+
+  const handleAcknowledgeGuidelines = (dontShowAgain) => {
+    if (dontShowAgain) {
+      try {
+        localStorage.setItem('spinflow_guidelines_acknowledged_v1', 'true');
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  };
 
   // Sync to local storage
   useEffect(() => {
@@ -513,6 +540,10 @@ export default function App() {
           setSelectedMachineForQR(machines[0] || INITIAL_MACHINES[0]);
           setIsQRStickerOpen(true);
         }}
+        onOpenGuidelines={() => {
+          sound.playClick();
+          setIsGuidelinesOpen(true);
+        }}
         onResetData={handleResetData}
       />
 
@@ -661,6 +692,13 @@ export default function App() {
         onClose={() => setIsDirectoryModalOpen(false)}
         directory={studentDirectory}
         onUpdateDirectory={handleUpdateDirectory}
+      />
+
+      {/* Hostel Laundry Rules & Guidelines Modal (Do's & Don'ts Pop-up) */}
+      <GuidelinesModal
+        isOpen={isGuidelinesOpen}
+        onClose={() => setIsGuidelinesOpen(false)}
+        onAcknowledge={handleAcknowledgeGuidelines}
       />
 
       {/* Notification Toast */}
