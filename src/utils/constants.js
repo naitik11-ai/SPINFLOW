@@ -41,6 +41,7 @@ export const TOTAL_HOSTEL_STUDENTS = 105;
 
 // Authorized Administrator Phone Numbers (strictly protected by Admin OTP)
 export const ADMIN_PHONE_NUMBERS = [
+  '7020387424', // Naitik Ramani (Hostel Admin / Room 204)
   '9999999999',
   '9876500000',
   '9811111111',
@@ -184,66 +185,111 @@ export const DORM_RULES = [
   },
 ];
 
-// Helper to generate official 105 hostel students master directory
-const FIRST_NAMES = [
-  'Harsh', 'Aarav', 'Vivaan', 'Aditya', 'Vihaan', 'Arjun', 'Sai', 'Reyansh', 'Ayaan', 'Krishna',
-  'Ishaan', 'Shaurya', 'Atharv', 'Advik', 'Pranav', 'Advaith', 'Aaryan', 'Dhruv', 'Kabir', 'Ritik',
-  'Devansh', 'Kian', 'Darsh', 'Samar', 'Laksh', 'Yash', 'Aryan', 'Ayush', 'Rohan', 'Aniket',
-  'Nikhil', 'Siddharth', 'Varun', 'Kunal', 'Abhishek', 'Mayank', 'Gaurav', 'Manish', 'Saurabh', 'Amit',
-  'Deepak', 'Vikram', 'Pooja', 'Ananya', 'Diya', 'Isha', 'Aadhya', 'Saanvi', 'Kiara', 'Myra',
-  'Pari', 'Riya', 'Anushka', 'Avani', 'Sneha', 'Tanvi', 'Khushi', 'Shruti', 'Simran', 'Neha',
-  'Meera', 'Kavya', 'Rashi', 'Divya', 'Sanjana', 'Kritika', 'Bhavya', 'Trisha', 'Palak', 'Swati',
-  'Alex', 'Brian', 'Chris', 'David', 'Ethan', 'Felix', 'George', 'Harry', 'Ian', 'Jacob',
-  'Kevin', 'Liam', 'Marcus', 'Nathan', 'Oliver', 'Peter', 'Quinn', 'Ryan', 'Samuel', 'Thomas',
-  'Victor', 'William', 'Xavier', 'Yusuf', 'Zack', 'Aman', 'Karan', 'Tarun', 'Vikas', 'Rahul',
-  'Akash', 'Bharat', 'Chirag', 'Dinesh', 'Hemant'
+// Official Master Student Directory (105 Registered Hostel Students across Floors 1 to 4)
+export const DEFAULT_STUDENT_DIRECTORY = [
+  { id: 'std-1', name: 'MUTHA HARDIK RATNESH', roomNo: '101', phone: '9529348097', status: 'Old', floor: '1st Floor' },
+  { id: 'std-2', name: 'BANGAR RUDRA AJAY', roomNo: '101', phone: '8999282820', status: 'Old', floor: '1st Floor' },
+  { id: 'std-3', name: 'BHANDARI SANSKAR SANDESH', roomNo: '101', phone: '9623391366', status: 'Old', floor: '1st Floor' },
+  { id: 'std-4', name: 'CHAUDHARI VEDAANG SUBODH', roomNo: '102', phone: '9284217388', status: 'Old', floor: '1st Floor' },
+  { id: 'std-5', name: 'KOTANGALE CHETAN GORKSHANATH', roomNo: '102', phone: '8055409952', status: 'Old', floor: '1st Floor' },
+  { id: 'std-6', name: 'KARNAWAT SIDDHANT SANDESH', roomNo: '102', phone: '9307769415', status: 'Old', floor: '1st Floor' },
+  { id: 'std-7', name: 'PAHADE ARYAN NILESH', roomNo: '103', phone: '9322917930', status: 'Old', floor: '1st Floor' },
+  { id: 'std-8', name: 'SANCHETI SIDDHANT SACHIN', roomNo: '103', phone: '9423337976', status: 'Old', floor: '1st Floor' },
+  { id: 'std-9', name: 'SHINDE UJJWAL PRAKASH', roomNo: '103', phone: '8080559446', status: 'Old', floor: '1st Floor' },
+  { id: 'std-10', name: 'PATANI ROCHIS TUSHAR', roomNo: '104', phone: '8767320322', status: 'Old', floor: '1st Floor' },
+  { id: 'std-11', name: 'PADHARIYA DEV TULSIDAS', roomNo: '104', phone: '8767628407', status: 'Old', floor: '1st Floor' },
+  { id: 'std-12', name: 'KALA RAMYAK NIRMALKUMAR', roomNo: '104', phone: '9563646560', status: 'Old', floor: '1st Floor' },
+  { id: 'std-13', name: 'JAIN SAMYAK NILESH', roomNo: '105', phone: '9423779421', status: 'Old', floor: '1st Floor' },
+  { id: 'std-14', name: 'PANDE VIPUL NITIN', roomNo: '105', phone: '7219632943', status: 'Old', floor: '1st Floor' },
+  { id: 'std-15', name: 'KASLIWAL SAMYAK NILESH', roomNo: '105', phone: '8788741261', status: 'Old', floor: '1st Floor' },
+  { id: 'std-16', name: 'BANSODE RASIK RAMDAS', roomNo: '201', phone: '9699393911', status: 'New', floor: '2nd Floor' },
+  { id: 'std-17', name: 'CHAVAN VIKRANT VIJAYKUMAR', roomNo: '201', phone: '8999151919', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-18', name: 'GANDHI VEER PANKAJ', roomNo: '201', phone: '9158141008', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-19', name: 'PARBHALE YASH SHARAD', roomNo: '202', phone: '9699162215', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-20', name: 'JAIN RITIK SACHIN', roomNo: '202', phone: '9503593015', status: 'New', floor: '2nd Floor' },
+  { id: 'std-21', name: 'CHAUDHARI HARSH NITESH', roomNo: '202', phone: '9284170362', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-22', name: 'BIBEKAR BHUPEN ARUN', roomNo: '203', phone: '9767567903', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-23', name: 'AGRAWAL MOHIT RAJESH', roomNo: '203', phone: '9637991199', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-24', name: 'HAGE JAYESH SHRIKRISHNA', roomNo: '203', phone: '9158359036', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-25', name: 'JAIN SAIYYAM RUPESH', roomNo: '204', phone: '9356970376', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-26', name: 'PATEL THAKRANI MEET SURESH', roomNo: '204', phone: '9819944202', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-27', name: 'RAMANI NAITIK HITENDRA', roomNo: '204', phone: '7020387424', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-28', name: 'PATEL DEEP VINOD', roomNo: '205', phone: '9373143036', status: 'New', floor: '2nd Floor' },
+  { id: 'std-29', name: 'PATEL KASHYAP AMIT', roomNo: '205', phone: '8308021010', status: 'New', floor: '2nd Floor' },
+  { id: 'std-30', name: 'PATEL SOHAM DHANSUKH', roomNo: '205', phone: '9834853424', status: 'New', floor: '2nd Floor' },
+  { id: 'std-31', name: 'SETH RAJ JITENDRA', roomNo: '206', phone: '7219151728', status: 'New', floor: '2nd Floor' },
+  { id: 'std-32', name: 'POKAR DHRUV KANTILAL', roomNo: '206', phone: '7620167282', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-33', name: 'PATEL DEEP KISHOR', roomNo: '206', phone: '9834539036', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-34', name: 'MASANE AYUSH MANISH', roomNo: '207', phone: '9309963098', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-35', name: 'PITKE ATHARVA PRAVIN', roomNo: '207', phone: '9579180594', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-36', name: 'NAKARANI PARTH KAPIL', roomNo: '207', phone: '9284383929', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-37', name: 'RAMANI YASH KALPESH', roomNo: '208', phone: '9699826371', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-38', name: 'KEDAR YASH GIRISH', roomNo: '208', phone: '7020084352', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-39', name: 'MAVANI ASHISH SHANTILAL', roomNo: '208', phone: '9665944115', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-40', name: 'SOLANKI AARYA PRAFFUL', roomNo: '209', phone: '8208926945', status: 'New', floor: '2nd Floor' },
+  { id: 'std-41', name: 'AGRAWAL GAGAN OMPRAKASH', roomNo: '209', phone: '9371441069', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-42', name: 'DAYMA VINEET YOGESH', roomNo: '209', phone: '7057381828', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-43', name: 'LALWANI PARTH ANAND', roomNo: '210', phone: '8793005953', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-44', name: 'CHHORIYA BHAVIK RIKHAB', roomNo: '210', phone: '8600252810', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-45', name: 'JAIN HARSHIT ABHAY', roomNo: '210', phone: '7666140085', status: 'Old', floor: '2nd Floor' },
+  { id: 'std-46', name: 'MUNDLIK MOHAK SHRIKANT', roomNo: '301', phone: '9096030404', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-47', name: 'KOTHARI ROHIT JITENDRA', roomNo: '301', phone: '7387879977', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-48', name: 'POLE SHIVTEJ SATISH', roomNo: '301', phone: '8080734134', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-49', name: 'NAVARKAR ANAGH RAJANISH', roomNo: '302', phone: '8010723204', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-50', name: 'PANDEY ARNAV VISHAL', roomNo: '302', phone: '8235025517', status: 'New', floor: '3rd Floor' },
+  { id: 'std-51', name: 'PATODI AAYUSH PARASKUMAR', roomNo: '302', phone: '9112699036', status: 'New', floor: '3rd Floor' },
+  { id: 'std-52', name: 'JOSHI MAYANK NITIN', roomNo: '303', phone: '9359936987', status: 'New', floor: '3rd Floor' },
+  { id: 'std-53', name: 'WANKHEDE RUDRATEJ MANOJ', roomNo: '303', phone: '9511615919', status: 'New', floor: '3rd Floor' },
+  { id: 'std-54', name: 'SHEKHAWAT SANDEEP MAHAVEER', roomNo: '303', phone: '6376073611', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-55', name: 'JAIN MEHUL DINESHKUMAR', roomNo: '304', phone: '7020172756', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-56', name: 'GADODIYA ATHARV MAHABIR', roomNo: '304', phone: '8421157858', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-57', name: 'PATEL JAYOM RAJESHKUMAR', roomNo: '304', phone: '9552644444', status: 'New', floor: '3rd Floor' },
+  { id: 'std-58', name: 'VYAS YUG TUSHARKUMAR', roomNo: '305', phone: '9377726738', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-59', name: 'CHANDAGADE ADITYA SATISH', roomNo: '305', phone: '7620794381', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-60', name: 'HIRAN NEEL PANKAJ', roomNo: '305', phone: '9422533170', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-61', name: 'DHOKE AASHAY MAHENDRA', roomNo: '306', phone: '8369835346', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-62', name: 'AGRAWAL TANAY VIJAY', roomNo: '306', phone: '9623144944', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-63', name: 'GANDHI GOVIND PRASHANT', roomNo: '306', phone: '8459291929', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-64', name: 'KHEDLEKAR NIRGUN NITIN', roomNo: '307', phone: '9890969420', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-65', name: 'SAHNI JASHANPREET SINGH JAGPREET SINGH', roomNo: '307', phone: '7575004375', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-66', name: 'JAIN PRATIK PRITESH', roomNo: '307', phone: '7498182199', status: 'New', floor: '3rd Floor' },
+  { id: 'std-67', name: 'GANDEWAR SANKALP SANDEEP', roomNo: '308', phone: '7393931293', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-68', name: 'BHANGALE ARNAV PRASHANT', roomNo: '308', phone: '7588283937', status: 'New', floor: '3rd Floor' },
+  { id: 'std-69', name: 'POWAR SHOURYA GANESH', roomNo: '308', phone: '7385689521', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-70', name: 'PATIL DEEPARAJ GORAKH', roomNo: '309', phone: '8320355844', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-71', name: 'BHOMAJ KEVAL SANJAY', roomNo: '309', phone: '9881393033', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-72', name: 'CHHAJER RIDHAM AMRUTLAL', roomNo: '309', phone: '9209388138', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-73', name: 'KOTHAWADE OM AJAY', roomNo: '310', phone: '9960313105', status: 'New', floor: '3rd Floor' },
+  { id: 'std-74', name: 'CHOUGULE MANAS SHASHIKANT', roomNo: '310', phone: '8329179324', status: 'New', floor: '3rd Floor' },
+  { id: 'std-75', name: 'PAGARIYA KARTIK RAJESH', roomNo: '310', phone: '7020387403', status: 'Old', floor: '3rd Floor' },
+  { id: 'std-76', name: 'HIRUGADE OM RAVINDRA', roomNo: '401', phone: '9689894301', status: 'New', floor: '4th Floor' },
+  { id: 'std-77', name: 'GAIKWAD SARVESH SANJAY', roomNo: '401', phone: '7972683378', status: 'New', floor: '4th Floor' },
+  { id: 'std-78', name: 'ULAPE ADITYA UDAY', roomNo: '401', phone: '8308089599', status: 'Old', floor: '4th Floor' },
+  { id: 'std-79', name: 'KATHURIA KARTIK PRATAP', roomNo: '402', phone: '7666774909', status: 'Old', floor: '4th Floor' },
+  { id: 'std-80', name: 'ARGULWAR MAYURESH VISHWANATH', roomNo: '402', phone: '9156874264', status: 'Old', floor: '4th Floor' },
+  { id: 'std-81', name: 'JAIPURIA ROHIT MUKESH', roomNo: '402', phone: '9823598680', status: 'New', floor: '4th Floor' },
+  { id: 'std-82', name: 'PAWAR SOHAM KASHINATH', roomNo: '403', phone: '7385689521', status: 'Old', floor: '4th Floor' },
+  { id: 'std-83', name: 'PATIL JYOTIRJAI PRAMOD', roomNo: '403', phone: '8421644562', status: 'New', floor: '4th Floor' },
+  { id: 'std-84', name: 'NIRHALE AJINKYA AMOL', roomNo: '403', phone: '6265908151', status: 'Old', floor: '4th Floor' },
+  { id: 'std-85', name: 'NALAWADE TANISHQ LALITKUMAR', roomNo: '404', phone: '9322779299', status: 'Old', floor: '4th Floor' },
+  { id: 'std-86', name: 'KHAMKAR OM HARIPANDIT', roomNo: '404', phone: '7796681337', status: 'Old', floor: '4th Floor' },
+  { id: 'std-87', name: 'GANDHI OM SANTOSH', roomNo: '404', phone: '7350073716', status: 'Old', floor: '4th Floor' },
+  { id: 'std-88', name: 'YAWLE VIRAJ DHARMENDRA', roomNo: '405', phone: '9518912697', status: 'Old', floor: '4th Floor' },
+  { id: 'std-89', name: 'KORADE SUJAY NITIN', roomNo: '405', phone: '7219444546', status: 'Old', floor: '4th Floor' },
+  { id: 'std-90', name: 'GONGE SHALIN SACHIN', roomNo: '405', phone: '7620199396', status: 'Old', floor: '4th Floor' },
+  { id: 'std-91', name: 'NAKRANI OM HEMANT', roomNo: '406', phone: '8766020343', status: 'New', floor: '4th Floor' },
+  { id: 'std-92', name: 'VALAMBHIYA DHRUV KAUSHALBHAI', roomNo: '406', phone: '9316021604', status: 'New', floor: '4th Floor' },
+  { id: 'std-93', name: 'LIMBANI DARSHAN KHIMJI', roomNo: '406', phone: '9325024091', status: 'New', floor: '4th Floor' },
+  { id: 'std-94', name: 'GOTHI HARRY DINESHBHAI', roomNo: '407', phone: '9173397798', status: 'New', floor: '4th Floor' },
+  { id: 'std-95', name: 'PATEL KIRTAN HARESHKUMAR', roomNo: '407', phone: '9099200346', status: 'New', floor: '4th Floor' },
+  { id: 'std-96', name: 'SENGHANI SHIV RAJESHBHAI', roomNo: '407', phone: '8799049385', status: 'New', floor: '4th Floor' },
+  { id: 'std-97', name: 'PUND TANMAY JITENDRA', roomNo: '408', phone: '7972271708', status: 'New', floor: '4th Floor' },
+  { id: 'std-98', name: 'BARDIA ANANT PRADEEP', roomNo: '408', phone: '8827139859', status: 'Old', floor: '4th Floor' },
+  { id: 'std-99', name: 'AGRAWAL SOMYA MAHESHKUMAR', roomNo: '408', phone: '8208599436', status: 'New', floor: '4th Floor' },
+  { id: 'std-100', name: 'BARDIA ABHINANDAN PANKAJ', roomNo: '409', phone: '9302221467', status: 'Old', floor: '4th Floor' },
+  { id: 'std-101', name: 'WALKE HARSH SUHAS', roomNo: '409', phone: '9970548171', status: 'Old', floor: '4th Floor' },
+  { id: 'std-102', name: 'KANNAWAR ESHAN UDAY', roomNo: '409', phone: '7558206741', status: 'Old', floor: '4th Floor' },
+  { id: 'std-103', name: 'BADODARIYA KARAN VRUJLAL', roomNo: '410', phone: '9426497529', status: 'New', floor: '4th Floor' },
+  { id: 'std-104', name: 'JAGANI KRISH JATIN', roomNo: '410', phone: '8055478435', status: 'New', floor: '4th Floor' },
+  { id: 'std-105', name: 'VAISHNANI MADHAV GIRISH', roomNo: '410', phone: '9979138334', status: 'New', floor: '4th Floor' },
 ];
-
-export const DEFAULT_STUDENT_DIRECTORY = (() => {
-  const students = [];
-  let nameIndex = 0;
-
-  // 1st Floor: Rooms 101 to 135 (35 students)
-  for (let r = 101; r <= 135; r++) {
-    const name = r === 101 ? 'Harsh' : (FIRST_NAMES[nameIndex % FIRST_NAMES.length] || `Student ${r}`);
-    const phone = r === 101 ? '9876543210' : `98${String(r).padStart(3, '0')}00${String(100 + (r % 90)).slice(-2)}`;
-    students.push({
-      id: `std-${r}`,
-      name,
-      roomNo: String(r),
-      phone,
-      floor: '1st Floor',
-    });
-    nameIndex++;
-  }
-
-  // 2nd Floor: Rooms 201 to 235 (35 students)
-  for (let r = 201; r <= 235; r++) {
-    const name = FIRST_NAMES[nameIndex % FIRST_NAMES.length] || `Student ${r}`;
-    const phone = `97${String(r).padStart(3, '0')}00${String(100 + (r % 90)).slice(-2)}`;
-    students.push({
-      id: `std-${r}`,
-      name,
-      roomNo: String(r),
-      phone,
-      floor: '2nd Floor',
-    });
-    nameIndex++;
-  }
-
-  // 3rd Floor: Rooms 301 to 335 (35 students)
-  for (let r = 301; r <= 335; r++) {
-    const name = FIRST_NAMES[nameIndex % FIRST_NAMES.length] || `Student ${r}`;
-    const phone = `96${String(r).padStart(3, '0')}00${String(100 + (r % 90)).slice(-2)}`;
-    students.push({
-      id: `std-${r}`,
-      name,
-      roomNo: String(r),
-      phone,
-      floor: '3rd Floor',
-    });
-    nameIndex++;
-  }
-
-  return students;
-})();

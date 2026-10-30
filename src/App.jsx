@@ -38,7 +38,7 @@ const STORAGE_KEY_MACHINES = 'spinflow_machines_v7';
 const STORAGE_KEY_QUEUE = 'spinflow_queue_v7';
 const STORAGE_KEY_HISTORY = 'spinflow_history_v7';
 const STORAGE_KEY_ADMIN = 'spinflow_admin_auth';
-const STORAGE_KEY_DIRECTORY = 'spinflow_student_directory_v1';
+const STORAGE_KEY_DIRECTORY = 'spinflow_student_directory_v2';
 
 export default function App() {
   const [adminUser, setAdminUser] = useState(() => {
@@ -53,7 +53,13 @@ export default function App() {
   const [studentDirectory, setStudentDirectory] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_DIRECTORY);
-      return saved ? JSON.parse(saved) : DEFAULT_STUDENT_DIRECTORY;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length === DEFAULT_STUDENT_DIRECTORY.length && parsed[0]?.phone === DEFAULT_STUDENT_DIRECTORY[0]?.phone) {
+          return parsed;
+        }
+      }
+      return DEFAULT_STUDENT_DIRECTORY;
     } catch {
       return DEFAULT_STUDENT_DIRECTORY;
     }

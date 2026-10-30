@@ -42,7 +42,8 @@ export default function StudentDirectoryModal({
       std.floor === selectedFloor || 
       (selectedFloor === '1st Floor' && Number(std.roomNo) >= 100 && Number(std.roomNo) < 200) ||
       (selectedFloor === '2nd Floor' && Number(std.roomNo) >= 200 && Number(std.roomNo) < 300) ||
-      (selectedFloor === '3rd Floor' && Number(std.roomNo) >= 300 && Number(std.roomNo) < 400);
+      (selectedFloor === '3rd Floor' && Number(std.roomNo) >= 300 && Number(std.roomNo) < 400) ||
+      (selectedFloor === '4th Floor' && Number(std.roomNo) >= 400 && Number(std.roomNo) < 500);
 
     return matchesSearch && matchesFloor;
   });
@@ -81,7 +82,8 @@ export default function StudentDirectoryModal({
             const roomNum = parseInt(roomNo, 10);
             let floor = '1st Floor';
             if (roomNum >= 200 && roomNum < 300) floor = '2nd Floor';
-            else if (roomNum >= 300) floor = '3rd Floor';
+            else if (roomNum >= 300 && roomNum < 400) floor = '3rd Floor';
+            else if (roomNum >= 400) floor = '4th Floor';
 
             parsed.push({
               id: `std-custom-${parsed.length + 1}`,
@@ -108,8 +110,8 @@ export default function StudentDirectoryModal({
   };
 
   const handleExportCSV = () => {
-    const header = 'Name,Room Number,Phone Number,Floor\n';
-    const rows = directory.map((s) => `"${s.name}","${s.roomNo}","${s.phone}","${s.floor || ''}"`).join('\n');
+    const header = 'Name,Room Number,Phone Number,Status,Floor\n';
+    const rows = directory.map((s) => `"${s.name}","${s.roomNo}","${s.phone}","${s.status || ''}","${s.floor || ''}"`).join('\n');
     const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -174,9 +176,10 @@ export default function StudentDirectoryModal({
                 className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-blue-500"
               >
                 <option value="all">All Floors</option>
-                <option value="1st Floor">1st Floor (Rooms 101-135)</option>
-                <option value="2nd Floor">2nd Floor (Rooms 201-235)</option>
-                <option value="3rd Floor">3rd Floor (Rooms 301-335)</option>
+                <option value="1st Floor">1st Floor (Rooms 101-105)</option>
+                <option value="2nd Floor">2nd Floor (Rooms 201-210)</option>
+                <option value="3rd Floor">3rd Floor (Rooms 301-310)</option>
+                <option value="4th Floor">4th Floor (Rooms 401-410)</option>
               </select>
 
               {/* Upload CSV Toggle */}
@@ -269,9 +272,20 @@ export default function StudentDirectoryModal({
                       <span className="text-xs font-bold text-slate-900 truncate">
                         {std.name}
                       </span>
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">
-                        Room {std.roomNo}
-                      </span>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {std.status && (
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                            std.status === 'New' 
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                              : 'bg-slate-100 text-slate-600 border border-slate-200'
+                          }`}>
+                            {std.status}
+                          </span>
+                        )}
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">
+                          Room {std.roomNo}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 mt-1">

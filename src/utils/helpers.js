@@ -181,7 +181,14 @@ export function verifyStudentIdentity(name = '', roomNo = '', phone = '', direct
   }
 
   // 1. Check if the phone number exists in directory
-  const matchedStudent = directory.find((std) => normalizePhone(std.phone) === cleanPhone);
+  // If multiple residents share a phone number, prioritize matching both phone and room first
+  let matchedStudent = directory.find(
+    (std) => normalizePhone(std.phone) === cleanPhone && normalizeRoomNo(std.roomNo) === cleanRoom
+  );
+
+  if (!matchedStudent) {
+    matchedStudent = directory.find((std) => normalizePhone(std.phone) === cleanPhone);
+  }
 
   if (!matchedStudent) {
     return {
@@ -248,7 +255,11 @@ export function checkWeeklyCooldown(identity, queue = [], history = []) {
     const roomMatch = cleanRoom && itemRoom && cleanRoom === itemRoom;
     const nameMatch = cleanName && itemName && (cleanName === itemName || cleanName.includes(itemName) || itemName.includes(cleanName));
 
-    return phoneMatch || (roomMatch && nameMatch);
+    if (phoneMatch) {
+      if (!cleanRoom && !cleanName) return true;
+      return roomMatch || nameMatch;
+    }
+    return roomMatch && nameMatch;
   };
 
   // 1. Check active/upcoming bookings in queue

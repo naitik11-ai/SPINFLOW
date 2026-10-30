@@ -135,7 +135,8 @@ export default function AdminDashboardModal({
           s.floor === selectedFloor ||
           (selectedFloor === '1st Floor' && Number(s.roomNo) >= 100 && Number(s.roomNo) < 200) ||
           (selectedFloor === '2nd Floor' && Number(s.roomNo) >= 200 && Number(s.roomNo) < 300) ||
-          (selectedFloor === '3rd Floor' && Number(s.roomNo) >= 300 && Number(s.roomNo) < 400);
+          (selectedFloor === '3rd Floor' && Number(s.roomNo) >= 300 && Number(s.roomNo) < 400) ||
+          (selectedFloor === '4th Floor' && Number(s.roomNo) >= 400 && Number(s.roomNo) < 500);
 
         let matchesQuota = true;
         if (filterQuota === 'locked') matchesQuota = s.isQuotaLocked;
@@ -326,9 +327,10 @@ export default function AdminDashboardModal({
                   className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-[11px] sm:text-xs text-slate-700 font-medium focus:outline-none focus:border-blue-500 truncate"
                 >
                   <option value="all">All Floors</option>
-                  <option value="1st Floor">1st Floor</option>
-                  <option value="2nd Floor">2nd Floor</option>
-                  <option value="3rd Floor">3rd Floor</option>
+                  <option value="1st Floor">1st Floor (101-105)</option>
+                  <option value="2nd Floor">2nd Floor (201-210)</option>
+                  <option value="3rd Floor">3rd Floor (301-310)</option>
+                  <option value="4th Floor">4th Floor (401-410)</option>
                 </select>
 
                 <select
@@ -377,6 +379,15 @@ export default function AdminDashboardModal({
                             <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
                               Room {s.roomNo}
                             </span>
+                            {s.status && (
+                              <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                                s.status === 'New' 
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                                  : 'bg-slate-100 text-slate-600 border border-slate-200'
+                              }`}>
+                                {s.status}
+                              </span>
+                            )}
                             <span className="text-[11px] font-mono text-slate-400 hidden md:inline">
                               {s.phone}
                             </span>

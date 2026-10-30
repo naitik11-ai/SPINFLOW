@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.student_directory (
   name TEXT NOT NULL,
   room_no TEXT NOT NULL,
   phone TEXT NOT NULL UNIQUE,
+  status TEXT DEFAULT 'Old', -- 'Old', 'New'
   floor TEXT DEFAULT '1st Floor',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
