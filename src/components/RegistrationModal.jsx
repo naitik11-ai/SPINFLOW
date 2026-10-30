@@ -185,7 +185,7 @@ export default function RegistrationModal({
         if (!verification.isValid) {
           errs.identity = verification.message;
           if (verification.errorType === 'ROOM_MISMATCH') errs.roomNumber = verification.message;
-          else if (verification.errorType === 'NAME_MISMATCH') errs.name = verification.message;
+          else if (verification.errorType === 'NAME_MISMATCH' || verification.errorType === 'INCOMPLETE_NAME') errs.name = verification.message;
           else errs.phone = verification.message;
         }
       }

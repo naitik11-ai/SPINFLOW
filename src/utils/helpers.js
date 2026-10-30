@@ -150,6 +150,51 @@ export function calculateLateArrivalRemainingSeconds(slotEndTimestamp) {
   return Math.floor((slotEndTimestamp - now) / 1000);
 }
 
+// Helper to extract words from a name string
+export function extractNameWords(str) {
+  return (str || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter((w) => w.length > 0);
+}
+
+// Compute Levenshtein distance between two strings
+export function levenshteinDistance(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const row = [];
+  for (let i = 0; i <= b.length; i++) row[i] = i;
+  for (let i = 1; i <= a.length; i++) {
+    let prev = i;
+    for (let j = 1; j <= b.length; j++) {
+      let val;
+      if (a[i - 1] === b[j - 1]) {
+        val = row[j - 1];
+      } else {
+        val = Math.min(row[j - 1] + 1, prev + 1, row[j] + 1);
+      }
+      row[j - 1] = prev;
+      prev = val;
+    }
+    row[b.length] = prev;
+  }
+  return row[b.length];
+}
+
+// Check if two individual words match (exact or 1-character typo tolerance for words >= 4 chars)
+export function nameWordsMatch(w1, w2) {
+  if (w1 === w2) return true;
+  if (w1.length >= 4 && w2.length >= 4) {
+    if (Math.abs(w1.length - w2.length) <= 1 && levenshteinDistance(w1, w2) <= 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // STRICT 3-WAY IDENTITY VERIFICATION: Name + Room Number + Phone Number against Master Directory
 export function verifyStudentIdentity(name = '', roomNo = '', phone = '', directory = DEFAULT_STUDENT_DIRECTORY) {
   const cleanPhone = normalizePhone(phone);
@@ -209,18 +254,40 @@ export function verifyStudentIdentity(name = '', roomNo = '', phone = '', direct
     };
   }
 
-  // 3. Strict Name Check: Does entered name match registered student name?
-  const registeredNameClean = matchedStudent.name.toLowerCase();
-  const isNameClose = 
-    registeredNameClean === cleanName || 
-    registeredNameClean.includes(cleanName) || 
-    cleanName.includes(registeredNameClean);
+  // 3. Name Check: Minimum 2 words required (e.g. First Name + Surname in any order)
+  const enteredWords = extractNameWords(name);
+  if (enteredWords.length < 2) {
+    return {
+      isValid: false,
+      errorType: 'INCOMPLETE_NAME',
+      message: 'Please enter your full name with at least your First Name and Surname (minimum 2 words, e.g. Naitik Ramani).',
+      matchedStudent,
+    };
+  }
 
-  if (!isNameClose) {
+  const registeredWords = extractNameWords(matchedStudent.name);
+  const matchedRegIndices = new Set();
+  let matchedCount = 0;
+
+  for (const eWord of enteredWords) {
+    let foundIndex = -1;
+    for (let i = 0; i < registeredWords.length; i++) {
+      if (!matchedRegIndices.has(i) && nameWordsMatch(eWord, registeredWords[i])) {
+        foundIndex = i;
+        break;
+      }
+    }
+    if (foundIndex !== -1) {
+      matchedRegIndices.add(foundIndex);
+      matchedCount++;
+    }
+  }
+
+  if (matchedCount < 2) {
     return {
       isValid: false,
       errorType: 'NAME_MISMATCH',
-      message: `Name mismatch: Mobile number ${matchedStudent.phone} in Room ${matchedStudent.roomNo} belongs to ${matchedStudent.name}, but "${name}" was entered. Please enter your exact registered name.`,
+      message: `Name mismatch: At least 2 words (e.g. First Name & Surname) must match your registered record (${matchedStudent.name}). Only ${matchedCount} word matched.`,
       matchedStudent,
     };
   }

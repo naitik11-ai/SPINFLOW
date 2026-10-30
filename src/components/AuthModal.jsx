@@ -90,7 +90,7 @@ export default function AuthModal({
     if (!verification.isValid) {
       if (verification.errorType === 'ROOM_MISMATCH') {
         errs.roomNo = verification.message;
-      } else if (verification.errorType === 'NAME_MISMATCH') {
+      } else if (verification.errorType === 'NAME_MISMATCH' || verification.errorType === 'INCOMPLETE_NAME') {
         errs.name = verification.message;
       } else {
         errs.phone = verification.message;
@@ -192,7 +192,7 @@ export default function AuthModal({
                   </span>
                 </div>
                 <p className="text-[11px] text-blue-800 leading-tight">
-                  Your <strong>Full Name</strong>, <strong>Room Number</strong>, and <strong>Mobile Number</strong> must match the registered hostel directory. Each account is allowed up to 3 slots per week.
+                  Enter your <strong>First Name & Surname</strong> (minimum 2 words, e.g. &quot;Naitik Ramani&quot;). Single-word names are invalid. Your Room and Phone must match the registered hostel directory.
                 </p>
               </div>
 
@@ -209,7 +209,7 @@ export default function AuthModal({
               {/* Full Name */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Full Name (as registered in hostel list) *
+                  Full Name (First Name + Surname, min 2 words) *
                 </label>
                 <div className="relative">
                   <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -274,7 +274,7 @@ export default function AuthModal({
                     type="button"
                     onClick={() => {
                       setFormData({
-                        name: 'RAMANI NAITIK HITENDRA',
+                        name: 'Naitik Ramani',
                         roomNo: '204',
                         phone: '7020387424',
                         rememberMe: true,
@@ -283,13 +283,13 @@ export default function AuthModal({
                     }}
                     className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 rounded-lg text-[10px] font-medium text-slate-700 transition-colors"
                   >
-                    Naitik (204 · 7020387424)
+                    Naitik Ramani (204 · 7020387424)
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       setFormData({
-                        name: 'MUTHA HARDIK RATNESH',
+                        name: 'Hardik Mutha',
                         roomNo: '101',
                         phone: '9529348097',
                         rememberMe: true,
@@ -298,13 +298,13 @@ export default function AuthModal({
                     }}
                     className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 rounded-lg text-[10px] font-medium text-slate-700 transition-colors"
                   >
-                    Hardik (101 · 9529348097)
+                    Hardik Mutha (101 · 9529348097)
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       setFormData({
-                        name: 'HIRUGADE OM RAVINDRA',
+                        name: 'Om Hirugade',
                         roomNo: '401',
                         phone: '9689894301',
                         rememberMe: true,
@@ -313,7 +313,7 @@ export default function AuthModal({
                     }}
                     className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 rounded-lg text-[10px] font-medium text-slate-700 transition-colors"
                   >
-                    Om (401 · 9689894301)
+                    Om Hirugade (401 · 9689894301)
                   </button>
                 </div>
               </div>
