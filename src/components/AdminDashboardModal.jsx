@@ -90,16 +90,16 @@ export default function AdminDashboardModal({
       const totalMinutesUsed = (completedSlotsCount + (isCurrentlyWashing ? 1 : 0)) * 90;
       const totalHoursFormatted = (totalMinutesUsed / 60).toFixed(1);
 
-      // Weekly quota check
-      const lastWash = studentHistory[0];
-      const isHistoryCooldown = lastWash && (now - (lastWash.completedAt || 0) < WEEKLY_COOLDOWN_MS);
-      const hasUpcomingBooking = studentQueue.length > 0;
-      const isQuotaLocked = isCurrentlyWashing || isHistoryCooldown || hasUpcomingBooking;
+      // Weekly quota check (max 3 slots per 7 days)
+      const recentWashes = studentHistory.filter((h) => now - (h.completedAt || 0) < WEEKLY_COOLDOWN_MS);
+      const weeklySlotsUsed = recentWashes.length + studentQueue.length + (isCurrentlyWashing ? 1 : 0);
+      const isQuotaLocked = weeklySlotsUsed >= 3;
 
       let quotaUnlockTimestamp = null;
       let quotaUnlockDays = 0;
-      if (lastWash && isHistoryCooldown) {
-        quotaUnlockTimestamp = (lastWash.completedAt || now) + WEEKLY_COOLDOWN_MS;
+      if (recentWashes.length > 0 && isQuotaLocked) {
+        const oldestRecentWash = recentWashes[recentWashes.length - 1];
+        quotaUnlockTimestamp = (oldestRecentWash.completedAt || now) + WEEKLY_COOLDOWN_MS;
         quotaUnlockDays = Math.max(1, Math.ceil((quotaUnlockTimestamp - now) / (24 * 60 * 60 * 1000)));
       }
 
@@ -110,10 +110,11 @@ export default function AdminDashboardModal({
         totalHoursFormatted,
         isCurrentlyWashing,
         activeWashSession,
-        hasUpcomingBooking,
+        hasUpcomingBooking: studentQueue.length > 0,
         upcomingBooking: studentQueue[0],
         studentHistory,
-        lastWash,
+        weeklySlotsUsed,
+        lastWash: studentHistory[0],
         isQuotaLocked,
         quotaUnlockTimestamp,
         quotaUnlockDays,
@@ -416,7 +417,7 @@ export default function AdminDashboardModal({
                           <div className="text-right">
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
                               <ShieldAlert className="w-3 h-3 text-amber-600" />
-                              Quota Locked
+                              Quota Locked (3/3 used)
                             </span>
                             {s.quotaUnlockDays > 0 && (
                               <span className="text-[10px] text-slate-500 block mt-0.5">
@@ -427,7 +428,7 @@ export default function AdminDashboardModal({
                         ) : (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            Eligible
+                            Eligible ({s.weeklySlotsUsed || 0}/3 used)
                           </span>
                         )}
 
@@ -598,7 +599,7 @@ export default function AdminDashboardModal({
                   <div>
                     <span className="text-slate-500 text-[10px] uppercase font-bold block">Quota Status</span>
                     <span className={`font-bold ${selectedStudentHistory.isQuotaLocked ? 'text-amber-800' : 'text-emerald-700'}`}>
-                      {selectedStudentHistory.isQuotaLocked ? 'Locked (1-Slot Quota Used)' : 'Eligible'}
+                      {selectedStudentHistory.isQuotaLocked ? 'Locked (3/3 Slots Used)' : `Eligible (${selectedStudentHistory.weeklySlotsUsed || 0}/3 Used)`}
                     </span>
                   </div>
                 </div>

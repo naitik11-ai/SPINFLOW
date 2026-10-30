@@ -182,17 +182,22 @@ export default function AuthModal({
             <form onSubmit={handleSendOtp} className="space-y-4">
               {/* Verification Info Note */}
               <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl text-xs text-blue-900 space-y-1">
-                <div className="flex items-center gap-1.5 font-bold">
-                  <ShieldCheck className="w-4 h-4 text-blue-600" />
-                  <span>3-Way Identity Verification</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <ShieldCheck className="w-4 h-4 text-blue-600" />
+                    <span>Resident OTP Verification</span>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                    Max 3 Slots / Week
+                  </span>
                 </div>
                 <p className="text-[11px] text-blue-800 leading-tight">
-                  Your <strong>Name</strong>, <strong>Room Number</strong>, and <strong>Phone Number</strong> must match the registered hostel master directory.
+                  Your <strong>Full Name</strong>, <strong>Room Number</strong>, and <strong>Mobile Number</strong> must match the registered hostel directory. Each account is allowed up to 3 slots per week.
                 </p>
               </div>
 
               {errors.global && (
-                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs space-y-1">
+                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs space-y-1 animate-in fade-in duration-150">
                   <div className="flex items-center gap-1.5 font-bold">
                     <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0" />
                     <span>Identity Verification Failed</span>
@@ -204,14 +209,14 @@ export default function AuthModal({
               {/* Full Name */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Full Name (as registered) *
+                  Full Name (as registered in hostel list) *
                 </label>
                 <div className="relative">
                   <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Harsh or Alex Chen"
+                    placeholder="e.g. Naitik Ramani or Mutha Hardik"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -223,17 +228,17 @@ export default function AuthModal({
               {/* Room Number */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Hostel Room Number (e.g. 101) *
+                  Hostel Room Number (e.g. 204) *
                 </label>
                 <div className="relative">
                   <Home className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     required
-                    placeholder="e.g. 101"
+                    placeholder="e.g. 204"
                     value={formData.roomNo}
                     onChange={(e) => setFormData({ ...formData, roomNo: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono"
                   />
                 </div>
                 {errors.roomNo && <p className="text-[11px] text-rose-600 mt-1">{errors.roomNo}</p>}
@@ -249,13 +254,68 @@ export default function AuthModal({
                   <input
                     type="tel"
                     required
-                    placeholder="e.g. 9876543210"
+                    maxLength={10}
+                    placeholder="e.g. 7020387424"
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '') })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono"
                   />
                 </div>
                 {errors.phone && <p className="text-[11px] text-rose-600 mt-1">{errors.phone}</p>}
+              </div>
+
+              {/* Quick Testing Resident Fill */}
+              <div className="pt-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                  🧪 Quick Test Sample Residents (1-Click Fill)
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        name: 'RAMANI NAITIK HITENDRA',
+                        roomNo: '204',
+                        phone: '7020387424',
+                        rememberMe: true,
+                      });
+                      setErrors({});
+                    }}
+                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 rounded-lg text-[10px] font-medium text-slate-700 transition-colors"
+                  >
+                    Naitik (204 · 7020387424)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        name: 'MUTHA HARDIK RATNESH',
+                        roomNo: '101',
+                        phone: '9529348097',
+                        rememberMe: true,
+                      });
+                      setErrors({});
+                    }}
+                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 rounded-lg text-[10px] font-medium text-slate-700 transition-colors"
+                  >
+                    Hardik (101 · 9529348097)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        name: 'HIRUGADE OM RAVINDRA',
+                        roomNo: '401',
+                        phone: '9689894301',
+                        rememberMe: true,
+                      });
+                      setErrors({});
+                    }}
+                    className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200 rounded-lg text-[10px] font-medium text-slate-700 transition-colors"
+                  >
+                    Om (401 · 9689894301)
+                  </button>
+                </div>
               </div>
 
               {/* Remember Me Checkbox */}
@@ -268,7 +328,7 @@ export default function AuthModal({
                   className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
                 />
                 <label htmlFor="rememberMe" className="text-xs text-slate-600 select-none">
-                  Remember my login on this device
+                  Keep me logged in on this browser
                 </label>
               </div>
 
@@ -304,15 +364,19 @@ export default function AuthModal({
               <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider block">
-                    Demo OTP Code
+                    SMS Testing OTP Code
                   </span>
                   <span className="font-mono text-base font-bold text-blue-950">
                     {generatedOtp}
                   </span>
                 </div>
-                <span className="text-[11px] text-blue-800 bg-white px-2 py-1 rounded border border-blue-200 font-medium">
-                  Auto-filled for testing
-                </span>
+                <button
+                  type="button"
+                  onClick={() => setOtp(generatedOtp)}
+                  className="text-[11px] text-blue-700 bg-white hover:bg-blue-100 px-2.5 py-1 rounded-lg border border-blue-200 font-bold transition-colors"
+                >
+                  Click to Fill OTP
+                </button>
               </div>
 
               {/* OTP Input */}

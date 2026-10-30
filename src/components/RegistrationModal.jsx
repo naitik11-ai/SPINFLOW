@@ -270,7 +270,7 @@ export default function RegistrationModal({
             <div className="flex items-center gap-2">
               <h2 className="text-sm sm:text-base font-bold text-slate-900">Book Laundry Slot</h2>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
-                1 Slot / Week Quota
+                Max 3 Slots / Week
               </span>
             </div>
             <p className="text-[11px] sm:text-xs text-slate-500">
@@ -289,18 +289,29 @@ export default function RegistrationModal({
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
           <div className="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
             
-            {/* Weekly Cooldown Alert Banner */}
-            {cooldownStatus.isCooldownActive && (
+            {/* Weekly Quota Status Banner */}
+            {cooldownStatus.isCooldownActive ? (
               <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 space-y-1">
                 <div className="flex items-center gap-2 font-bold text-xs">
                   <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>Weekly 1-Slot Quota Locked</span>
+                  <span>Weekly 3-Slot Quota Locked (3/3 Used)</span>
                 </div>
                 <p className="text-[11px] text-amber-800 leading-relaxed">
                   {cooldownStatus.message}
                 </p>
               </div>
-            )}
+            ) : currentIdentity.phone ? (
+              <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2 text-blue-900">
+                  <ShieldCheck className="w-4 h-4 text-blue-600" />
+                  <span className="font-semibold">Weekly Usage Quota:</span>
+                  <span className="font-bold text-blue-700">{cooldownStatus.usedCount || 0} / 3 slots used</span>
+                </div>
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                  {cooldownStatus.remainingSlots} slot{cooldownStatus.remainingSlots !== 1 ? 's' : ''} available
+                </span>
+              </div>
+            ) : null}
 
             {/* Identity Mismatch Alert Banner */}
             {errors.identity && (

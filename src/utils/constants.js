@@ -35,8 +35,9 @@ export const FIXED_SLOTS = [
   { id: 'slot-12', index: 12, label: '22:30 - 00:00', startTime: '22:30', endTime: '00:00', startMinutes: 1350, endMinutes: 1440, period: 'Night' },
 ];
 
-// Cooldown rule: 1 slot per student per 7 days (105 students sharing 1 washing machine)
+// Quota rule: Maximum 3 slots per student per 7 days
 export const WEEKLY_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+export const MAX_WEEKLY_SLOTS_PER_STUDENT = 3;
 export const TOTAL_HOSTEL_STUDENTS = 105;
 
 // Authorized Administrator Phone Numbers (strictly protected by Admin OTP)
@@ -152,8 +153,8 @@ export const LAUNDRY_GUIDELINES = {
       desc: 'The door remains electronically locked during the cycle. Forcing it open will break the safety latch.'
     },
     {
-      title: 'Do NOT Exceed Weekly 1-Slot Quota',
-      desc: 'Each resident is strictly allowed 1 slot per 7 days. Do not attempt multiple bookings in the same week.'
+      title: 'Do NOT Exceed Weekly 3-Slot Quota',
+      desc: 'Each resident is strictly allowed a maximum of 3 slots per 7 days. Do not attempt more than 3 bookings in a single week.'
     }
   ]
 };
@@ -164,8 +165,8 @@ export const DORM_RULES = [
     desc: 'The washing machine operates strictly in 12 generalized 90-minute slot windows each day.',
   },
   {
-    title: 'Weekly 1-Slot Quota per Resident',
-    desc: 'With 105 students sharing 1 machine, each resident is allocated 1 slot every 7 days to ensure fair and equal access.',
+    title: 'Weekly 3-Slot Quota per Resident',
+    desc: 'Each resident account is allocated up to 3 slots every 7 days (maximum 3 times a week) to ensure fair access.',
   },
   {
     title: 'Load Limit: Max 10 Clothes (5 Pairs) or 1 Bedsheet',

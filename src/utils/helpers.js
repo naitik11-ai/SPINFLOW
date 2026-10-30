@@ -1,4 +1,4 @@
-import { FIXED_SLOTS, WEEKLY_COOLDOWN_MS, DEFAULT_STUDENT_DIRECTORY } from './constants';
+import { FIXED_SLOTS, WEEKLY_COOLDOWN_MS, MAX_WEEKLY_SLOTS_PER_STUDENT, DEFAULT_STUDENT_DIRECTORY } from './constants.js';
 
 // Format seconds into HH:MM:SS or MM:SS
 export function formatTimer(seconds) {
@@ -232,15 +232,33 @@ export function verifyStudentIdentity(name = '', roomNo = '', phone = '', direct
   };
 }
 
-// Check if a student is under the 7-day weekly cooldown across all 3 identifiers
+// Check if a student has exceeded their maximum allowed slots per 7-day period (Max 3 slots per week)
 export function checkWeeklyCooldown(identity, queue = [], history = []) {
-  if (!identity) return { isCooldownActive: false };
+  const maxSlots = MAX_WEEKLY_SLOTS_PER_STUDENT || 3;
+
+  if (!identity) {
+    return {
+      isCooldownActive: false,
+      usedCount: 0,
+      maxSlots,
+      remainingSlots: maxSlots,
+      message: '',
+    };
+  }
 
   const cleanPhone = normalizePhone(identity.phone || '');
   const cleanRoom = normalizeRoomNo(identity.roomNo || '');
   const cleanName = (identity.name || '').trim().toLowerCase();
 
-  if (!cleanPhone && !cleanRoom) return { isCooldownActive: false };
+  if (!cleanPhone && !cleanRoom) {
+    return {
+      isCooldownActive: false,
+      usedCount: 0,
+      maxSlots,
+      remainingSlots: maxSlots,
+      message: '',
+    };
+  }
 
   const now = Date.now();
 
@@ -263,44 +281,56 @@ export function checkWeeklyCooldown(identity, queue = [], history = []) {
   };
 
   // 1. Check active/upcoming bookings in queue
-  const activeBooking = queue.find((q) => q.status !== 'cancelled' && matchesIdentity(q));
-
-  if (activeBooking) {
-    return {
-      isCooldownActive: true,
-      reason: 'ACTIVE_BOOKING',
-      message: `Weekly 1-slot quota reached: ${identity.name || 'Resident'} (Room ${identity.roomNo || activeBooking.roomNo}) already has an active slot booked for ${activeBooking.slotDateDisplay || activeBooking.slotDate || 'this week'} (${activeBooking.slotLabel || '1h 30m'}). Each student gets 1 slot per 7 days.`,
-      booking: activeBooking,
-    };
-  }
+  const activeBookings = queue.filter((q) => q.status !== 'cancelled' && matchesIdentity(q));
 
   // 2. Check completed wash slots in history within 7 days
   const recentHistory = history
     .filter((h) => matchesIdentity(h) && (now - (h.completedAt || 0) < WEEKLY_COOLDOWN_MS))
-    .sort((a, b) => (b.completedAt || 0) - (a.completedAt || 0));
+    .sort((a, b) => (a.completedAt || 0) - (b.completedAt || 0)); // Oldest first to identify earliest unlocking wash
 
-  if (recentHistory.length > 0) {
-    const lastWash = recentHistory[0];
-    const expiryTimestamp = (lastWash.completedAt || now) + WEEKLY_COOLDOWN_MS;
-    const daysRemaining = Math.max(1, Math.ceil((expiryTimestamp - now) / (24 * 60 * 60 * 1000)));
-    const expiryDate = new Date(expiryTimestamp).toLocaleDateString([], {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    });
+  const totalUsed = activeBookings.length + recentHistory.length;
+  const remainingSlots = Math.max(0, maxSlots - totalUsed);
+
+  if (totalUsed >= maxSlots) {
+    let unlockDateStr = 'soon';
+    let daysRemaining = 7;
+    let expiryTimestamp = now + WEEKLY_COOLDOWN_MS;
+
+    if (recentHistory.length > 0) {
+      const oldestWash = recentHistory[0];
+      expiryTimestamp = (oldestWash.completedAt || now) + WEEKLY_COOLDOWN_MS;
+      daysRemaining = Math.max(1, Math.ceil((expiryTimestamp - now) / (24 * 60 * 60 * 1000)));
+      unlockDateStr = new Date(expiryTimestamp).toLocaleDateString([], {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+      });
+    }
 
     return {
       isCooldownActive: true,
-      reason: 'COOLDOWN_ACTIVE',
-      message: `Weekly 1-slot quota reached: Last wash for ${identity.name || lastWash.name} (Room ${identity.roomNo || lastWash.roomNo}) was on ${new Date(lastWash.completedAt).toLocaleDateString()}. Next slot opens in ${daysRemaining} day${daysRemaining > 1 ? 's' : ''} on ${expiryDate}.`,
-      lastWash,
+      reason: 'QUOTA_EXCEEDED',
+      usedCount: totalUsed,
+      maxSlots,
+      remainingSlots: 0,
+      activeBookings,
+      recentHistory,
+      message: `Weekly limit reached: ${identity.name || 'Resident'} (Room ${identity.roomNo || ''}) has used all ${maxSlots} allowed slots for this week (${activeBookings.length} active, ${recentHistory.length} completed). ${recentHistory.length > 0 ? `Next slot opens in ${daysRemaining} day${daysRemaining > 1 ? 's' : ''} on ${unlockDateStr}.` : 'Please complete your current active booking first.'}`,
       expiryTimestamp,
-      expiryDate,
+      expiryDate: unlockDateStr,
       daysRemaining,
     };
   }
 
-  return { isCooldownActive: false };
+  return {
+    isCooldownActive: false,
+    usedCount: totalUsed,
+    maxSlots,
+    remainingSlots,
+    activeBookings,
+    recentHistory,
+    message: `Weekly Quota: ${totalUsed}/${maxSlots} slots used (${remainingSlots} slot${remainingSlots === 1 ? '' : 's'} remaining this week).`,
+  };
 }
 
 // Calculate wait time / earliest available slot

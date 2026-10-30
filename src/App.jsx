@@ -3,6 +3,7 @@ import Header from './components/Header';
 import MachineCard from './components/MachineCard';
 import QueueBoard from './components/QueueBoard';
 import RegistrationModal from './components/RegistrationModal';
+import AuthModal from './components/AuthModal';
 import AdminAuthModal from './components/AdminAuthModal';
 import ViewQRCodeModal from './components/ViewQRCodeModal';
 import QRScannerModal from './components/QRScannerModal';
@@ -39,11 +40,21 @@ const STORAGE_KEY_QUEUE = 'spinflow_queue_v7';
 const STORAGE_KEY_HISTORY = 'spinflow_history_v7';
 const STORAGE_KEY_ADMIN = 'spinflow_admin_auth';
 const STORAGE_KEY_DIRECTORY = 'spinflow_student_directory_v2';
+const STORAGE_KEY_USER = 'spinflow_resident_user_v2';
 
 export default function App() {
   const [adminUser, setAdminUser] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_ADMIN);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_USER);
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -93,6 +104,14 @@ export default function App() {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_USER);
+      return !saved;
+    } catch {
+      return true;
+    }
+  });
   const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
   const [isAdminAuthOpen, setIsAdminAuthOpen] = useState(false);
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
@@ -103,11 +122,11 @@ export default function App() {
   const [preselectedMachineId, setPreselectedMachineId] = useState('machine-1');
   const [toast, setToast] = useState(null);
 
-  // Auto-display Guidelines on initial visit
+  // Auto-display Guidelines on initial visit (after resident is logged in)
   useEffect(() => {
     try {
       const hasAcknowledged = localStorage.getItem('spinflow_guidelines_acknowledged_v1');
-      if (!hasAcknowledged) {
+      if (!hasAcknowledged && currentUser && !isAuthModalOpen) {
         const timer = setTimeout(() => {
           setIsGuidelinesOpen(true);
         }, 600);
@@ -116,7 +135,7 @@ export default function App() {
     } catch {
       // Fallback
     }
-  }, []);
+  }, [currentUser, isAuthModalOpen]);
 
   const handleAcknowledgeGuidelines = (dontShowAgain) => {
     if (dontShowAgain) {
@@ -359,6 +378,55 @@ export default function App() {
     });
   };
 
+  // Resident Student Login Handler (Phone + OTP Verified)
+  const handleLoginResident = (verifiedUser, rememberMe = true) => {
+    setCurrentUser(verifiedUser);
+    setIsAuthModalOpen(false);
+    if (rememberMe) {
+      try {
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(verifiedUser));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+    setToast({
+      type: 'success',
+      title: 'Identity Verified & Logged In',
+      message: `Welcome, ${verifiedUser.name}! (Room ${verifiedUser.rawRoomNo || verifiedUser.roomNo}). Max 3 slots/week active.`,
+    });
+  };
+
+  // Resident Student Logout Handler
+  const handleLogoutResident = () => {
+    sound.playClick();
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem(STORAGE_KEY_USER);
+    } catch (e) {
+      console.warn(e);
+    }
+    setToast({
+      type: 'info',
+      title: 'Logged Out',
+      message: 'Resident account session closed.',
+    });
+  };
+
+  // Unified Open Booking Flow (Checks resident auth first)
+  const handleOpenBooking = (machineId = 'machine-1') => {
+    setPreselectedMachineId(machineId);
+    if (!currentUser) {
+      setIsAuthModalOpen(true);
+      setToast({
+        type: 'info',
+        title: 'Resident Login Required',
+        message: 'Please verify your registered mobile number with OTP to book a slot.',
+      });
+      return;
+    }
+    setIsModalOpen(true);
+  };
+
   // Admin Login Handler (Phone + OTP Verified)
   const handleAdminLoginSuccess = (admin) => {
     setAdminUser(admin);
@@ -538,10 +606,10 @@ export default function App() {
         adminUser={adminUser}
         onOpenAdmin={handleOpenAdminClick}
         onLogoutAdmin={handleAdminLogout}
-        onOpenBooking={() => {
-          setPreselectedMachineId('machine-1');
-          setIsModalOpen(true);
-        }}
+        currentUser={currentUser}
+        onOpenLogin={() => setIsAuthModalOpen(true)}
+        onLogoutResident={handleLogoutResident}
+        onOpenBooking={() => handleOpenBooking('machine-1')}
         onOpenQRSticker={() => {
           setSelectedMachineForQR(machines[0] || INITIAL_MACHINES[0]);
           setIsQRStickerOpen(true);
@@ -571,16 +639,13 @@ export default function App() {
               <MachineCard
                 key={machine.id}
                 machine={machine}
-                currentUser={null}
+                currentUser={currentUser}
                 currentActiveSlot={currentActiveSlot}
                 currentSlotBooking={currentSlotBooking}
                 upcomingReservation={upcomingReservation}
                 onCollectClothes={handleCollectClothes}
                 onToggleMaintenance={handleToggleMaintenance}
-                onQuickBook={(machineId) => {
-                  setPreselectedMachineId(machineId);
-                  setIsModalOpen(true);
-                }}
+                onQuickBook={(machineId) => handleOpenBooking(machineId)}
                 onOpenQRScanner={(machineId) => {
                   setPreselectedMachineId(machineId);
                   setIsQRScannerOpen(true);
@@ -599,13 +664,10 @@ export default function App() {
           <QueueBoard
             queue={queue}
             machines={machines}
-            currentUser={null}
+            currentUser={currentUser}
             onCancelQueueItem={handleCancelQueueItem}
             onNotifyResident={handleNotifyResident}
-            onOpenBooking={() => {
-              setPreselectedMachineId('machine-1');
-              setIsModalOpen(true);
-            }}
+            onOpenBooking={() => handleOpenBooking('machine-1')}
           />
         </section>
 
@@ -631,8 +693,7 @@ export default function App() {
         <button
           onClick={() => {
             sound.playClick();
-            setPreselectedMachineId('machine-1');
-            setIsModalOpen(true);
+            handleOpenBooking('machine-1');
           }}
           className="flex-1 py-3 px-3 rounded-xl text-xs font-bold bg-blue-600 active:bg-blue-700 text-white transition-colors flex items-center justify-center gap-1.5 shadow-sm"
         >
@@ -651,7 +712,16 @@ export default function App() {
         history={history}
         studentDirectory={studentDirectory}
         preselectedMachineId={preselectedMachineId}
-        currentUser={null}
+        currentUser={currentUser}
+      />
+
+      {/* Student Resident Phone + OTP Registration/Login Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLoginSuccess={handleLoginResident}
+        currentUser={currentUser}
+        studentDirectory={studentDirectory}
       />
 
       {/* Machine QR Code Scanner Dialog */}
@@ -661,7 +731,7 @@ export default function App() {
         onScanSuccess={handleQRScanSuccess}
         machines={machines}
         currentActiveSlot={currentActiveSlot}
-        currentUser={null}
+        currentUser={currentUser}
       />
 
       {/* Machine QR Sticker Printable View Modal */}
@@ -697,6 +767,16 @@ export default function App() {
         isOpen={isDirectoryModalOpen}
         onClose={() => setIsDirectoryModalOpen(false)}
         directory={studentDirectory}
+        onSelectStudent={(std) => {
+          handleLoginResident({
+            id: std.id,
+            name: std.name,
+            roomNo: `Room ${std.roomNo}`,
+            rawRoomNo: std.roomNo,
+            phone: std.phone,
+            loggedInAt: Date.now()
+          }, true);
+        }}
         onUpdateDirectory={handleUpdateDirectory}
       />
 

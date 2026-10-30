@@ -10,7 +10,8 @@ import {
   BarChart3,
   Lock,
   ShieldCheck,
-  BookOpen
+  BookOpen,
+  User
 } from 'lucide-react';
 import { sound } from '../utils/audio';
 
@@ -21,7 +22,10 @@ export default function Header({
   onOpenGuidelines,
   adminUser = null,
   onOpenAdmin,
-  onLogoutAdmin
+  onLogoutAdmin,
+  currentUser = null,
+  onOpenLogin,
+  onLogoutResident
 }) {
   const [isMuted, setIsMuted] = useState(false);
 
@@ -60,6 +64,47 @@ export default function Header({
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Resident Student Login / Account Button */}
+            {currentUser ? (
+              <div className="flex items-center bg-blue-50 border border-blue-200 text-blue-900 rounded-lg p-0.5 sm:p-1 text-xs">
+                <button
+                  onClick={() => {
+                    sound.playClick();
+                    onOpenLogin();
+                  }}
+                  title={`Logged in as ${currentUser.name} (${currentUser.roomNo})`}
+                  className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 text-blue-900 font-bold hover:text-blue-700 transition-colors"
+                >
+                  <User className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="text-[11px] sm:text-xs truncate max-w-[80px] sm:max-w-[120px]">
+                    {currentUser.name.split(' ')[0]}
+                  </span>
+                  <span className="text-[10px] font-mono text-blue-700 hidden xs:inline">
+                    ({currentUser.rawRoomNo || currentUser.roomNo?.replace(/[^0-9]/g, '')})
+                  </span>
+                </button>
+                <button
+                  onClick={onLogoutResident}
+                  title="Logout Resident Account"
+                  className="p-1 rounded hover:bg-blue-100 text-slate-400 hover:text-rose-600 transition-colors"
+                >
+                  <LogOut className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  sound.playClick();
+                  onOpenLogin();
+                }}
+                title="Student Login / Register with Mobile OTP"
+                className="py-1.5 px-2.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center gap-1.5 shrink-0 shadow-xs"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Login</span>
+              </button>
+            )}
+
             {/* Admin Portal Button */}
             {adminUser ? (
               <div className="flex items-center bg-slate-900 text-white rounded-lg p-0.5 sm:p-1 text-xs">
